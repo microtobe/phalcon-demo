@@ -1,0 +1,12 @@
+{
+  "name": "coffee-script",
+  "_cacheHeaders": {
+    "Last-Modified": "Sun, 02 Jun 2013 05:38:20 GMT",
+    "Content-Length": "200362",
+    "Content-Type": "application/x-javascript"
+  },
+  "main": "index.js",
+  "_source": "http://coffeescript.org/extras/coffee-script.js",
+  "_target": "*",
+  "_originalSource": "http://coffeescript.org/extras/coffee-script.js"
+}

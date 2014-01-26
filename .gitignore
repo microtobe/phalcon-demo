@@ -1,0 +1,11 @@
+/composer.lock
+/.cake_task_cache
+/.idea/
+/.tags
+/.tags_sorted_by_file
+/.tm_properties
+/tmp/*
+/logs/*
+/app/cache/*
+/vendor/*
+/public/js/*

@@ -1,0 +1,12 @@
+body {font:14px Tahoma, Arial, Verdana; line-height:180%;}
+h1, h2, h3, h4, h5 {font-weight:bold; margin:15px 0;}
+h1 {font-size:28px;}
+h2 {font-size:24px;}
+h3 {font-size:20px;}
+h4 {font-size:16px;}
+h5 {font-size:14px;}
+img {border:none;}
+
+.info-box {color:#000; font-family: Consolas,'Courier New'; margin:0; text-align:left; border:1px solid #ccc;}
+.info-title {font-size:14px; padding:8px; background:#EFF5FF;}
+.info-body {font-size:12px; padding:8px; border-top:1px solid #ccc; line-height:170%;}

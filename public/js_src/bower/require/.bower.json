@@ -1,0 +1,14 @@
+{
+  "name": "require",
+  "_cacheHeaders": {
+    "ETag": "\"fbeaf0fe7d774711ba34c7d7a60541cc\"",
+    "Content-Length": "82678",
+    "Content-Type": "text/plain; charset=utf-8",
+    "Content-Disposition": "inline"
+  },
+  "_release": "e-tag:fbeaf0fe7",
+  "main": "index.js",
+  "_source": "https://raw.github.com/jrburke/requirejs/master/require.js",
+  "_target": "*",
+  "_originalSource": "https://raw.github.com/jrburke/requirejs/master/require.js"
+}

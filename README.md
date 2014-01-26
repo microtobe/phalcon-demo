@@ -1,4 +1,86 @@
-phalcon-demo
-============
+# 环境设置
 
-phalcone framework - simple demo
+##Nginx 配置:
+
+```
+server {
+    listen      80;
+    server_name phalcon-demo.fanqie88.com;
+    root        /web/phalcon-demo/public;
+    charset     utf-8;
+    index       index.php index.html index.htm;
+
+    try_files   $uri $uri/ @rewrite;
+
+    location @rewrite {
+        rewrite ^/(.*)$ /index.php?_url=/$1;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass            127.0.0.1:9000;
+        fastcgi_index           index.php;
+        include                 fastcgi_params;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_param           SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_param           PATH_INFO          $fastcgi_path_info;
+        fastcgi_param           PATH_TRANSLATED    $document_root$fastcgi_path_info;
+        fastcgi_param           FORMAX_ENV         'PRODUCTION'; # PRODUCTION|TESTING|DEVELOPMENT
+    }
+
+    location ~ .*\.(gif|jpg|jpeg|png|bmp|swf|ico|js|css)$ {
+        expires    30d;
+        access_log off;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+    access_log  logs/phalcon-demo.log  main;
+}
+```
+
+# 相关组件
+
+##自动安装脚本
+
+自动安装 composer & phalcon-devtools & Phalcon Incubator:
+
+```bash
+sh bin/install-phalcon-devtools.sh
+```
+
+##手动安装
+
+###composer.json
+
+参考根目录下 composer.json
+
+更多的库参考 (https://packagist.org/explore/)
+
+###composer
+
+参考 (http://getcomposer.org/)
+
+```bash
+curl -s http://getcomposer.org/installer | php
+mv composer.phar /usr/bin/composer
+```
+
+###phalcon-devtools
+
+参考 (https://github.com/phalcon/phalcon-devtools)
+
+```bash
+composer install
+ln -s vendor/phalcon/devtools/phalcon.php /usr/bin/phalcon
+chmod ugo+x /usr/bin/phalcon
+```
+
+###Phalcon Incubator
+
+参考 (https://github.com/phalcon/incubator)
+
+```bash
+composer install
+```

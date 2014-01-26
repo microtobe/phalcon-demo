@@ -1,0 +1,14 @@
+{
+  "name": "i18n",
+  "_cacheHeaders": {
+    "ETag": "\"ec668d5cf4486e8ed6582643b832c695\"",
+    "Content-Length": "7977",
+    "Content-Type": "text/plain; charset=utf-8",
+    "Content-Disposition": "inline"
+  },
+  "_release": "e-tag:ec668d5cf",
+  "main": "index.js",
+  "_source": "https://raw.github.com/requirejs/i18n/latest/i18n.js",
+  "_target": "*",
+  "_originalSource": "https://raw.github.com/requirejs/i18n/latest/i18n.js"
+}
