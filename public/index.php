@@ -29,7 +29,9 @@ if (! extension_loaded('pdo_mysql')) {
     exit('PDO_MYSQL extension is not installed');
 }
 
-// 建议打开 short_open_tag
+/**
+ * 建议打开 short_open_tag
+ */
 if (! ini_get('short_open_tag')) {
     exit('Please modify <php.ini> and "short_open_tag" is set to "on"');
 }
@@ -54,7 +56,7 @@ require APP_PATH . '/common/functions.php';
  */
 $config = config('application');
 if ($config === false) {
-    trigger_error('Application configuration failed to load', E_USER_ERROR);
+    exit('Application configuration failed to load');
 }
 
 /**
