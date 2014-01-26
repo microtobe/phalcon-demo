@@ -17,17 +17,7 @@
 			"name": "config",
 			"include": [
 				"jquery",
-				"underscore",
-				"i18n",
-				"nls/root/chart_notices",
-				"nls/zh-cn/chart_notices"
-			]
-		},
-		{
-			"name": "quotes",
-			"exclude": [
-				"config",
-				"coffee-script"
+				"i18n"
 			]
 		}
 	]

@@ -62,7 +62,6 @@ task 'build-file', 'update app.build.js', ->
       name   : 'config',
       include: [
         'jquery'
-        'underscore'
         'i18n'
       ]
     ]
