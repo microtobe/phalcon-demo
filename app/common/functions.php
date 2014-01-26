@@ -63,7 +63,7 @@ function partial_view($partialPath, array $params = null)
  */
 function pick_view($renderView)
 {
-    return service('view')->partial($renderView);
+    return service('view')->pick($renderView);
 }
 
 /**
