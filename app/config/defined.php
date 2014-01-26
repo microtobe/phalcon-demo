@@ -41,7 +41,7 @@ define('DEVELOPMENT', 'development');
 
 /**
  * 定义开发环境
- * 如果服务器定义了 FORMAX_ENV 变量，则以 FORMAX_ENV 值作为环境定义
+ * 如果服务器定义了 APP_ENV 变量，则以 APP_ENV 值作为环境定义
  *
  * @example for nginx config
  *     location ~ \.php$ {
@@ -49,8 +49,8 @@ define('DEVELOPMENT', 'development');
  *         fastcgi_param LITECMS_ENV 'PRODUCTION'; # PRODUCTION|TESTING|DEVELOPMENT
  *     }
  */
-if (isset($_SERVER['FORMAX_ENV'])) {
-    $env = strtoupper($_SERVER['FORMAX_ENV']);
+if (isset($_SERVER['APP_ENV'])) {
+    $env = strtoupper($_SERVER['APP_ENV']);
     if (defined($env)) {
         define('ENVIRONMENT', constant($env));
     }
