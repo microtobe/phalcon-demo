@@ -46,7 +46,7 @@ $di->setShared('router', function () {
 $di->setShared('url', function () use ($config) {
     $url = new Phalcon\Mvc\Url();
     $url->setBaseUri($config->url->baseUri);
-    $url-> setStaticBaseUri($config->url->staticBaseUri);
+    $url->setStaticBaseUri($config->url->staticBaseUri);
 
     return $url;
 });
@@ -166,7 +166,7 @@ $di->setShared('dispatcher', function () use ($di) {
  * @see http://docs.phalconphp.com/en/latest/reference/cache.html
  */
 $di->setShared('cache', function () use ($config, $di) {
-    // Cache the files for 2 days using a Data frontend
+    // Create an Output frontend
     $frontCache = new Phalcon\Cache\Frontend\Data($config->cache->frontendOptions->toArray());
 
     // Create the component that will cache "Data" to a "File" backend

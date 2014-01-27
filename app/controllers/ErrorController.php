@@ -47,9 +47,7 @@ class ErrorController extends ControllerBase
 
         // AJAX 输出
         if ($this->request->isAjax()) {
-            $ajax = new \AJAX($this->response);
-
-            return $ajax->response($code, $exception->getMessage())->send();
+            return $this->ajax->response($code, $exception->getMessage())->send();
         }
 
         $this->view->code = $code;

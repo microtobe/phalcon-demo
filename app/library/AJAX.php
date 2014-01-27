@@ -39,9 +39,6 @@ class AJAX
      */
     public function setResponse(Response $response)
     {
-        // set http response header
-        $response->setContentType('application/json', 'utf-8');
-
         $this->_response = $response;
 
         return $this;
@@ -72,17 +69,15 @@ class AJAX
      */
     public function response($code, $message = null, array $data = null)
     {
-        $options = defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE : null;
-
-        // 响应数据
-        $data = array(
-            'code'      => (int) $code,
-            'message'   => $message,
-            'data'      => $data,
-            'timestamp' => time(),
-        );
-
-        return $this->getResponse()->setJsonContent($data, $options);
+        return $this
+            ->getResponse()
+            ->setContentType('application/json', 'utf-8') // set http response header
+            ->setJsonContent(array(
+                'code'      => (int) $code,
+                'message'   => $message,
+                'data'      => $data,
+                'timestamp' => time(),
+            ), defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE : null);
     }
 
     /**

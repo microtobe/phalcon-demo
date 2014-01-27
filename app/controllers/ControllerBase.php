@@ -9,11 +9,15 @@ use Phalcon\Mvc\Controller,
 class ControllerBase extends Controller
 {
 
+    public $ajax = null;
+
     /**
      * Action 完成前执行
      */
     public function beforeExecuteRoute($dispatcher)
     {
+        $this->ajax = new Formax\AJAX($this->response);
+
         return true; // false 时停止执行
     }
 
