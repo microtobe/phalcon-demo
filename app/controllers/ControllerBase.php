@@ -16,7 +16,7 @@ class ControllerBase extends Controller
      */
     public function beforeExecuteRoute($dispatcher)
     {
-        $this->ajax = new Formax\AJAX($this->response);
+        $this->ajax = new \AJAX($this->response);
 
         return true; // false 时停止执行
     }
