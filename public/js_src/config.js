@@ -6,7 +6,7 @@ require.config({
 
 		// require.js 扩展
 		cs  : 'bower/cs/index',    // 支持 CoffeeScript https://github.com/jrburke/require-cs
-		i18n: 'bower/i18n/index',  // 多语言版本         https://github.com/requirejs/i18n
+		i18n: 'bower/i18n/index',  // 多语言版本        https://github.com/requirejs/i18n
 
 		'coffee-script': 'bower/coffee-script/index'
 	},

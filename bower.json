@@ -1,0 +1,24 @@
+{
+  "name": "phalcon-demo",
+  "version": "1.0.0",
+  "homepage": "https://github.com/zhouyl/phalcon-demo",
+  "authors": [
+    "zhouyl <zhouyonglong@formaxmarket.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/js_src/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "coffee-script": "http://coffeescript.org/extras/coffee-script.js",
+    "cs": "https://raw.github.com/jrburke/require-cs/latest/cs.js",
+    "i18n": "https://raw.github.com/requirejs/i18n/latest/i18n.js",
+    "jquery": "http://code.jquery.com/jquery.js",
+    "require": "https://raw.github.com/jrburke/requirejs/master/require.js"
+  }
+}
