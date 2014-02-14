@@ -162,26 +162,6 @@ function json_it($array, $pretty = true, $unescaped = true)
 }
 
 /**
- * 将数组转换为xml
- *
- * @see http://www.lalit.org/lab/convert-php-array-to-xml-with-attributes/
- */
-function array2xml(array $array, $node = 'root')
-{
-    return LSS\Array2XML::createXML($node, $array)->saveXML();
-}
-
-/**
- * 将 xml 转换为数组
- *
- * @see http://www.lalit.org/lab/convert-xml-to-array-in-php-xml2array/
- */
-function xml2array($xml)
-{
-    return LSS\XML2Array::createArray($xml);
-}
-
-/**
  * 简化日志写入方法
  */
 function write_log($name, $message, $type = null, $addUrl = false)
@@ -216,6 +196,29 @@ function write_log($name, $message, $type = null, $addUrl = false)
 function strip_path($path)
 {
     return str_replace(ROOT_PATH, '~', $path);
+}
+
+/**
+ * email格式检查 (支持验证host有效性)
+ */
+function is_email($email, $test_mx = false)
+{
+    if (preg_match('/^([_a-z0-9+-]+)(\.[_a-z0-9-]+)*@([a-z0-9-]+)(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i', $email)) {
+        if ($test_mx) {
+            list( , $domain) = explode("@", $email);
+            return getmxrr($domain, $mxrecords);
+        }
+        return true;
+    }
+    return false;
+}
+
+/**
+ * 检查是否效的 url
+ */
+function is_url($url)
+{
+    return preg_match('/^https?:\/\/([a-z0-9\-]+\.)+[a-z]{2,3}([a-z0-9_~#%&\/\'\+\=\:\?\.\-])*$/i', $url);
 }
 
 /**
@@ -296,17 +299,6 @@ function cache_save($key, $data, $lifetime = 86400, $stopBuffer = false)
 function cache_delete($key)
 {
     return service('cache')->delete($key . '.cache');
-}
-
-/**
- * 获取某个浮点数的 digit，比如 12.39719 返回 5
- *
- * @param  float  $number
- * @return int
- */
-function get_digits($number)
-{
-    return strlen(preg_replace('/\d+\./', '', $number));
 }
 
 /**

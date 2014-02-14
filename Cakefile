@@ -38,7 +38,7 @@ task 'pro', 'build for production, uglifyjs optimized', ->
   spawnWithLog 'r.js', ['-o', 'app.build.js'], 'Merge/Optimize JS done'
 
 task 'php', 'PHP Coding Standards Fixer', ->
-  spawnWithLog 'bin/fix_php_coding_style.sh', []
+  spawnWithLog 'bin/fix-php-coding-style.sh', []
 
 task 'build-file', 'update app.build.js', ->
   # https://github.com/jrburke/r.js/blob/master/build/example.build.js

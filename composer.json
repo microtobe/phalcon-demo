@@ -1,7 +1,6 @@
 {
     "require": {
         "phalcon/devtools": "dev-master",
-        "phalcon/incubator": "v1.2.4",
-        "openlss/lib-array2xml": "dev-master"
+        "phalcon/incubator": "v1.2.4"
     }
 }

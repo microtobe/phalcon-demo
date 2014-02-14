@@ -1,6 +1,7 @@
 <?php
 
-use Phalcon\Mvc\Dispatcher,
+use
+    Phalcon\Mvc\Dispatcher,
     Phalcon\Events\Event,
     Phalcon\Mvc\Dispatcher\Exception as DispatchException;
 

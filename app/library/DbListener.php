@@ -1,6 +1,7 @@
 <?php
 
-use Phalcon\Db\Profiler,
+use
+    Phalcon\Db\Profiler,
     Phalcon\Logger;
 
 /**

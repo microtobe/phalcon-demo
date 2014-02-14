@@ -1,6 +1,7 @@
 <?php
 
-use Phalcon\Http\Response;
+use
+    Phalcon\Http\Response;
 
 class AJAX
 {
