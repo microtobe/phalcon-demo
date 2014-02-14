@@ -206,10 +206,13 @@ function is_email($email, $test_mx = false)
     if (preg_match('/^([_a-z0-9+-]+)(\.[_a-z0-9-]+)*@([a-z0-9-]+)(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i', $email)) {
         if ($test_mx) {
             list( , $domain) = explode("@", $email);
+
             return getmxrr($domain, $mxrecords);
         }
+
         return true;
     }
+
     return false;
 }
 
