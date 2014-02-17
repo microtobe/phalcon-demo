@@ -40,47 +40,13 @@ server {
 }
 ```
 
-# 相关组件
+# 项目安装
 
-##自动安装脚本
+##自动安装 php 相关组件
 
-自动安装 composer & phalcon-devtools & Phalcon Incubator:
-
-```bash
-sh bin/install-phalcon-devtools.sh
-```
-
-##手动安装
-
-###composer.json
-
-参考根目录下 composer.json
-
-更多的库参考 (https://packagist.org/explore/)
-
-###composer
-
-参考 (http://getcomposer.org/)
+安装内容包括 composer
 
 ```bash
-curl -s http://getcomposer.org/installer | php
-mv composer.phar /usr/bin/composer
+sh bin/install.sh
 ```
 
-###phalcon-devtools
-
-参考 (https://github.com/phalcon/phalcon-devtools)
-
-```bash
-composer install
-ln -s vendor/phalcon/devtools/phalcon.php /usr/bin/phalcon
-chmod ugo+x /usr/bin/phalcon
-```
-
-###Phalcon Incubator
-
-参考 (https://github.com/phalcon/incubator)
-
-```bash
-composer install
-```

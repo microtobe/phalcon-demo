@@ -14,7 +14,6 @@ return new Phalcon\Config(array(
             'incubatorDir'   => VEN_PATH . '/phalcon/incubator/Library',
         ),
         'namespaces' => array(
-            'LSS' => VEN_PATH . '/openlss/lib-array2xml/LSS',
         ),
         'prefixes' => array(
         ),
