@@ -166,7 +166,7 @@ function json_it($array, $pretty = true, $unescaped = true)
  */
 function write_log($name, $message, $type = null, $addUrl = false)
 {
-    static $logger;
+    static $logger, $formatter;
 
     if (! isset($logger[$name])) {
         $logfile = ROOT_PATH . '/logs/' . date('/Ym/') . $name . '_' . date('Ymd') . '.log';
@@ -175,6 +175,14 @@ function write_log($name, $message, $type = null, $addUrl = false)
         }
 
         $logger[$name] = new Phalcon\Logger\Adapter\File($logfile);
+
+        // Set the logger format
+        if ($formatter === null) {
+            $formatter = new Phalcon\Logger\Formatter\Line();
+            $formatter->setDateFormat('Y-m-d H:i:s O');
+        }
+
+        $logger[$name]->setFormatter($formatter);
     }
 
     if ($type === null) {
@@ -343,7 +351,7 @@ function require_js($name)
 
     return <<<RJS
 $bootup
-<script>
+<script type="text/javascript">
 new BootUp([
     "$baseUrl/bower/require/index.js",
     "$baseUrl/config.js",

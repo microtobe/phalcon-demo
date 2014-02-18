@@ -44,9 +44,18 @@ server {
 
 ##自动安装 php 相关组件
 
-安装内容包括 composer
-
 ```bash
 sh bin/install.sh
 ```
 
+##Node.js组件
+
+- Require.js <http://www.requirejs.org/>
+- Bower <http://bower.io/>
+- CoffeeScript <http://coffeescript.org/>
+
+```bash
+npm install -g requirejs
+npm install -g bower
+npm install -g coffee-script
+```
