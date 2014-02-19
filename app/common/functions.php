@@ -378,3 +378,185 @@ function script_bootup()
 
     return '<script src="'.static_url('js_src/bootup.js').'"></script>';
 }
+
+/**
+ * 按指定的长度切割字符串
+ *
+ * @param  string  $string 需要切割的字符串
+ * @param  integer $length 长度
+ * @param  string  $suffix 切割后补充的字符串
+ * @return string
+ */
+function str_break($string, $length, $suffix = '')
+{
+    if (strlen($string) <= $length + strlen($suffix)) {
+        return $string;
+    }
+
+    $n = $tn = $noc = 0;
+    while ($n < strlen($string)) {
+        $t = ord($string[$n]);
+        if ($t == 9 || $t == 10 || (32 <= $t && $t <= 126)) {
+            $tn = 1; $n++; $noc++;
+        } elseif (194 <= $t && $t <= 223) {
+            $tn = 2; $n += 2; $noc += 2;
+        } elseif (224 <= $t && $t < 239) {
+            $tn = 3; $n += 3; $noc += 2;
+        } elseif (240 <= $t && $t <= 247) {
+            $tn = 4; $n += 4; $noc += 2;
+        } elseif (248 <= $t && $t <= 251) {
+            $tn = 5; $n += 5; $noc += 2;
+        } elseif ($t == 252 || $t == 253) {
+            $tn = 6; $n += 6; $noc += 2;
+        } else {
+            $n++;
+        }
+        if ($noc >= $length) {
+            break;
+        }
+    }
+    $noc > $length && $n -= $tn;
+    $strcut = substr($string, 0, $n);
+    if (strlen($strcut) < strlen($string)) {
+        $strcut .= $suffix;
+    }
+
+    return $strcut;
+}
+
+/**
+ * 字符串高亮
+ *
+ * @param  string  $string  需要的高亮的字符串
+ * @param  mixed   $keyword 关键字，可以是一个数组
+ * @return string
+ */
+function highlight_keyword($string, $keyword)
+{
+    $string = (string) $string;
+
+    if ($string && $keyword) {
+        if (! is_array($keyword)) {
+            $keyword = array($keyword);
+        }
+
+        $pattern = array();
+        foreach ($keyword as $word) {
+            if (! empty($word)) {
+                $pattern[] = '(' . str_replace('/', '\/',  preg_quote($word)) . ')';
+            }
+        }
+
+        if (! empty($pattern)) {
+            $string = preg_replace(
+                '/(' . implode('|', $pattern) . ')/is',
+                '<span style="background:#FF0;color:#E00;">\\1</span>',
+                $string
+            );
+        }
+    }
+
+    return $string;
+}
+
+/**
+ * 将 HTML 转换为文本
+ *
+ * @param  string $html
+ * @return string
+ */
+function html2txt($html)
+{
+    $html = trim($html);
+    if (empty($html))
+        return $html;
+    $search = array("'<script[^>]*?>.*?</script>'si",
+        "'<style[^>]*?>.*?</style>'si",
+        "'<[\/\!]*?[^<>]*?>'si",
+        "'([\r\n])[\s]+'",
+        "'&(quot|#34);'i",
+        "'&(amp|#38);'i",
+        "'&(lt|#60);'i",
+        "'&(gt|#62);'i",
+        "'&(nbsp|#160)[;]*'i",
+        "'&(iexcl|#161);'i",
+        "'&(cent|#162);'i",
+        "'&(pound|#163);'i",
+        "'&(copy|#169);'i",
+        "'&#(\d+);'e"
+    );
+    $replace = array("", "", "", "\\1", "\"", "&", "<", ">", " ",
+                     chr(161), chr(162), chr(163), chr(169), "chr(\\1)");
+
+    return preg_replace($search, $replace, $html);
+}
+
+/**
+ * 递归地合并一个或多个数组(不同于 array_merge_recursive)
+ *
+ * @return array
+ */
+if (! function_exists('array_merge_deep')) {
+    function array_merge_deep()
+    {
+        $a = func_get_args();
+        for ($i = 1; $i < count($a); $i++) {
+            foreach ($a[$i] as $k => $v) {
+                if (isset($a[0][$k])) {
+                    if (is_array($v)) {
+                        if (is_array($a[0][$k])) {
+                            $a[0][$k] = array_merge_deep($a[0][$k], $v);
+                        } else {
+                            $v[] = $a[0][$k];
+                            $a[0][$k] = $v;
+                        }
+                    } else {
+                        $a[0][$k] = is_array($a[0][$k]) ? array_merge($a[0][$k], array($v)) : $v;
+                    }
+                } else {
+                    $a[0][$k] = $v;
+                }
+            }
+        }
+
+        return $a[0];
+    }
+}
+
+/**
+ * Make a string's first character lowercase
+ *
+ * @param  string $string
+ * @return string
+ */
+if (! function_exists('lcfirst')) {
+    function lcfirst($string)
+    {
+        $string = (string) $string;
+
+        return empty($string) ? '' : strtolower($string{0}) . substr($string, 1);
+    }
+}
+
+/**
+ * Lowercase the first character of each word in a string
+ *
+ * @param  string $string
+ * @return string
+ */
+if (! function_exists('lcwords')) {
+    function lcwords($string)
+    {
+        $tokens = explode(' ', $string);
+        if (! is_array($tokens) || count($tokens) <= 1) {
+            return lcfirst($string);
+        }
+
+        $result = array();
+        foreach ($tokens as $token) {
+            $result[] = lcfirst($token);
+        }
+
+        return implode(' ', $result);
+    }
+}
