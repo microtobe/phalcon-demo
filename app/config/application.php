@@ -9,13 +9,28 @@ return new Phalcon\Config(array(
             'controllersDir' => APP_PATH . '/controllers/',
             'modelsDir'      => APP_PATH . '/models/',
             'libraryDir'     => APP_PATH . '/library/',
-            'pluginDir'      => APP_PATH . '/plugin/',
+            'pluginsDir'     => APP_PATH . '/plugins/',
             // @see https://github.com/phalcon/incubator
             'incubatorDir'   => VEN_PATH . '/phalcon/incubator/Library',
         ),
         'namespaces' => array(
         ),
         'prefixes' => array(
+        ),
+    ),
+
+    /**
+     * @see http://docs.phalconphp.com/en/latest/reference/models.html#models-meta-data
+     * @see http://docs.phalconphp.com/en/latest/api/Phalcon_Mvc_Model_MetaData.html
+     */
+    'models' => array(
+        'metadata' => array(
+            'adapter' => 'files',
+            'options' => array(
+                'lifetime'    => 1800, // 30 minutes
+                'prefix'      => '',
+                'metaDataDir' => APP_PATH . '/metadata/',
+            ),
         ),
     ),
 
@@ -27,8 +42,8 @@ return new Phalcon\Config(array(
         'adapter'  => 'Mysql',
         'host'     => 'localhost',
         'username' => 'root',
-        'password' => '',
-        'dbname'   => 'phalcon-demo',
+        'password' => 'root',
+        'dbname'   => 'test',
         'options'  => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
             PDO::ATTR_CASE => PDO::CASE_LOWER,

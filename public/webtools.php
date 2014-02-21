@@ -20,7 +20,6 @@
 
 use Phalcon\Web\Tools;
 
-require dirname(__DIR__) . '/app/config/defined.php';
 require 'webtools.config.php';
 require PTOOLSPATH . '/scripts/Phalcon/Web/Tools.php';
 

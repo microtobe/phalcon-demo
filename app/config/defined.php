@@ -69,32 +69,42 @@ define('IS_CLI', (PHP_SAPI === 'cli'));
 // 定义是否 windows 环境
 define('IS_WIN', (DIRECTORY_SEPARATOR === '\\'));
 
-// 定义是否 AJAX 请求
-define('IS_AJAX', isset($_SERVER['HTTP_X_REQUESTED_WITH']) and
-    'xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH']));
-
-// 定义是否 cURL 请求
-define('IS_CURL', stripos($_SERVER['HTTP_USER_AGENT'], 'curl') !== false);
-
-// 定义主机地址
-if (isset($_SERVER['HTTP_HOST'])) {
-    define('HTTP_HOST', strtolower($_SERVER['HTTP_HOST']));
-} elseif (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-    define('HTTP_HOST', strtolower($_SERVER['HTTP_X_FORWARDED_HOST']));
-}
-
-// 定义 HTTP 协议
-define('HTTP_PROTOCOL', (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === FALSE) ? 'http' : 'https');
-
-// 定义是否 SSL
-define('HTTP_SSL', (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') !== FALSE));
-
-// 定义当前基础域名
-if ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') {
-    define('HTTP_BASE', HTTP_PROTOCOL . '://' . HTTP_HOST . '/');
+if (IS_CLI) {
+    define('IS_AJAX',       false);
+    define('IS_CURL',       false);
+    define('HTTP_HOST',     null);
+    define('HTTP_PROTOCOL', null);
+    define('HTTP_BASE',     null);
+    define('HTTP_URL',      null);
 } else {
-    define('HTTP_BASE', HTTP_PROTOCOL . '://' . HTTP_HOST . ':' . $_SERVER['SERVER_PORT'] . '/');
+    // 定义是否 AJAX 请求
+    define('IS_AJAX', isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+        'xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH']));
+
+    // 定义是否 cURL 请求
+    define('IS_CURL', stripos($_SERVER['HTTP_USER_AGENT'], 'curl') !== false);
+
+    // 定义主机地址
+    if (isset($_SERVER['HTTP_HOST'])) {
+        define('HTTP_HOST', strtolower($_SERVER['HTTP_HOST']));
+    } elseif (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+        define('HTTP_HOST', strtolower($_SERVER['HTTP_X_FORWARDED_HOST']));
+    }
+
+    // 定义 HTTP 协议
+    define('HTTP_PROTOCOL', (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === FALSE) ? 'http' : 'https');
+
+    // 定义是否 SSL
+    define('HTTP_SSL', (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') !== FALSE));
+
+    // 定义当前基础域名
+    if ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') {
+        define('HTTP_BASE', HTTP_PROTOCOL . '://' . HTTP_HOST . '/');
+    } else {
+        define('HTTP_BASE', HTTP_PROTOCOL . '://' . HTTP_HOST . ':' . $_SERVER['SERVER_PORT'] . '/');
+    }
+
+    // 定义当前页面 URL 地址
+    define('HTTP_URL', rtrim(HTTP_BASE, '/') . $_SERVER['REQUEST_URI']);
 }
 
-// 定义当前页面 URL 地址
-define('HTTP_URL', rtrim(HTTP_BASE, '/') . $_SERVER['REQUEST_URI']);

@@ -18,5 +18,5 @@ $bin fix $app_dir/app/config --level=all --fixers=-psr0
 $bin fix $app_dir/app/controllers --level=all --fixers=-psr0
 $bin fix $app_dir/app/library --level=all --fixers=-psr0
 $bin fix $app_dir/app/models --level=all --fixers=-psr0
-$bin fix $app_dir/app/plugin --level=all --fixers=-psr0
+$bin fix $app_dir/app/plugins --level=all --fixers=-psr0
 $bin fix $app_dir/app/tasks --level=all --fixers=-psr0

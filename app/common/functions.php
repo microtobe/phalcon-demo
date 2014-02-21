@@ -19,6 +19,17 @@ function config($name)
 }
 
 /**
+ * 实例化一个 model
+ */
+function model($name)
+{
+    // 格式化类名
+    $class = implode('_', array_map('ucfirst', explode('_', $name)));
+
+    return new $class(Phalcon\DI::getDefault());
+}
+
+/**
  * 简化 Phalcon\Di::getDefault()->getShared($service)
  */
 function service($service)
@@ -48,6 +59,14 @@ function static_url($uri = null)
 function baseurl($uri = null, $base = HTTP_BASE)
 {
     return HTTP_BASE . ltrim($uri, '/');
+}
+
+/**
+ * 根据 query string 参数生成 url
+ */
+function url_param($uri, array $params)
+{
+    return $uri . (strpos($uri, '?') ? '&' : '?') . http_build_query(array_unique($params));
 }
 
 /**

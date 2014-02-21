@@ -37,6 +37,14 @@ class DbListener
     public function afterQuery($event, $connection)
     {
         $this->_profiler->stopProfile();
+
+        // write database log
+        if (DEVELOPMENT === ENVIRONMENT) {
+            $profile = $this->_profiler->getLastProfile();
+            $sql = $profile->getSQLStatement();
+            $secs = round($profile->getTotalElapsedSeconds(), 8);
+            write_log('database', "[$secs] $sql");
+        }
     }
 
     public function getProfiler()

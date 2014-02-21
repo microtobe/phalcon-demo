@@ -6,8 +6,10 @@ chmod +x $0
 chown -R nobody.nobody $0
 
 root_dir=$(cd "$(dirname "$0")"; cd ..; pwd)
+
 log_dir=$root_dir/logs
 cache_dir=$root_dir/app/cache
+metadata_dir=$root_dir/app/metadata
 config_file=$root_dir/app/config/application.php
 
 if [ ! -d $log_dir ]; then
@@ -20,9 +22,15 @@ if [ ! -d $cache_dir ]; then
     echo "Cache directory make sure!"
 fi
 
+if [ ! -d $metadata_dir ]; then
+    mkdir -p $metadata_dir
+    echo "MetaData directory make sure!"
+fi
+
 if [ ! -f $config_file ]; then
     echo "Missing configuration file: $config_file"
 fi
 
 chown -R nobody.nobody $log_dir
 chown -R nobody.nobody $cache_dir
+chown -R nobody.nobody $metadata_dir
