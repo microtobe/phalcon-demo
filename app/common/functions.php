@@ -7,15 +7,51 @@ function config($name)
 {
     static $cached = array();
 
-    if (! isset($cached[$name])) {
-        $file = APP_PATH . '/config/' . $name . '.php';
+    // 移除多余的分隔符
+    $name = trim($name, '.');
 
-        if (is_file($file)) {
-            $cached[$name] = include $file;
+    if (! isset($cached[$name])) {
+        $filename = $name;
+
+        // 获取配置名及路径
+        if (strpos($name, '.') !== false) {
+            $paths = explode('.', $name);
+            $filename = array_shift($paths);
         }
+
+        // 查找配置文件
+        $file = APP_PATH . '/config/' . $filename . '.php';
+        if (! is_file($file)) {
+            return null;
+        }
+
+        // 从文件中加载配置数据
+        $data = include $file;
+        if (is_array($data)) {
+            $data = new Phalcon\Config($data);
+        }
+
+        // 缓存文件数据
+        $cached[$filename] = $data;
+
+        // 支持路径方式获取配置，例如：config('file.key.subkey')
+        if (isset($paths)) {
+            foreach ($paths as $key) {
+                if (is_array($data) && isset($data[$key])) {
+                    $data = $data[$key];
+                } elseif (is_object($data) && isset($data->{$key})) {
+                    $data = $data->{$key};
+                } else {
+                    $data = null;
+                }
+            }
+        }
+
+        // 缓存数据
+        $cached[$name] = $data;
     }
 
-    return isset($cached[$name]) ? $cached[$name] : null;
+    return $cached[$name];
 }
 
 /**

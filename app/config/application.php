@@ -1,6 +1,6 @@
 <?php
 
-return new Phalcon\Config(array(
+return array(
     /**
      * @see http://docs.phalconphp.com/en/latest/reference/loader.html
      */
@@ -78,4 +78,4 @@ return new Phalcon\Config(array(
             'cacheDir' => APP_PATH . '/cache/',
         ),
     ),
-));
+);

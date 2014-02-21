@@ -20,7 +20,7 @@ require_once ROOT_PATH . '/app/config/defined.php';
 /**
  * 加载默认配置
  */
-$application = include ROOT_PATH . '/app/config/application.php';
+$application = new \Phalcon\Config(include ROOT_PATH . '/app/config/application.php');
 
 /**
  * Only for phalcon webtools
