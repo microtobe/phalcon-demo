@@ -122,12 +122,16 @@ function pick_view($renderView)
 }
 
 /**
- * 文本翻译简化方法
+ * 语言转换
+ *
+ * @param  string  $string  要转换的字符串，默认传入中文
+ * @param  array   $values  需要替换的参数
+ * @param  string  $lang    指定的语言类型
+ * @return string
  */
-function __($str, $from, $to = null)
+function __($string, array $values = null, $lang = null)
 {
-    // @TODO 翻译
-    return strtr($str, $from, $to);
+    return service('i18n')->translate($string, $values, $lang);
 }
 
 /**

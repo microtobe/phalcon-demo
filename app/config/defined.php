@@ -107,4 +107,3 @@ if (IS_CLI) {
     // 定义当前页面 URL 地址
     define('HTTP_URL', rtrim(HTTP_BASE, '/') . $_SERVER['REQUEST_URI']);
 }
-

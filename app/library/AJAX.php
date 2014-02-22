@@ -63,9 +63,9 @@ class AJAX
     /**
      * AJAX 响应数据 (JSON格式)
      *
-     * @param  int    $code    响应代码
-     * @param  string $message 响应消息
-     * @param  array  $data    响应数据
+     * @param  integer $code    响应代码
+     * @param  string  $message 响应消息
+     * @param  array   $data    响应数据
      * @return string
      */
     public function response($code, $message = null, array $data = null)

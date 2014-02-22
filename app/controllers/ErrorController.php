@@ -22,13 +22,13 @@ class ErrorController extends ControllerBase
             // 401 UNAUTHORIZED
             case ($exception->getCode() == 401):
                 $code = 401;
-                $text = 'UNAUTHORIZED';
+                $title = '401 Unauthorized';
                 break;
 
             // 403 FORBIDDEN
             case ($exception->getCode() == 403):
                 $code = 403;
-                $text = 'FORBIDDEN';
+                $title = '403 Forbidden';
                 break;
 
             // 404 NOT FOUND
@@ -36,13 +36,13 @@ class ErrorController extends ControllerBase
             case ($exception instanceof Phalcon\Mvc\View\Exception):
             case ($exception instanceof Phalcon\Mvc\Dispatcher\Exception):
                 $code = 404;
-                $text = 'NOT FOUND';
+                $title = '404 Not Found';
                 break;
 
             // 500 INTERNAL SERVER ERROR
             default:
                 $code = 500;
-                $text = 'INTERNAL SERVER ERROR';
+                $title = '500 Internal Server Error';
         }
 
         // AJAX 输出
@@ -51,7 +51,7 @@ class ErrorController extends ControllerBase
         }
 
         $this->view->code = $code;
-        $this->view->title = $code . ' ' . $text;
+        $this->view->title = $title;
     }
 
 }
