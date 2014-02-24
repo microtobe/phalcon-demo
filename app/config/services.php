@@ -205,6 +205,7 @@ $di['i18n'] = function () use ($config, $di) {
     // 完成 i18n 初始化
     $i18n = new \I18n();
     $i18n->addDirectory($config->i18n->directory)
+        ->addAliases($config->i18n->aliases->toArray())
         ->setDefault($i18n->hasLang($lang) ? $lang : $config->i18n->default)
         ->import($config->i18n->import->toArray());
 

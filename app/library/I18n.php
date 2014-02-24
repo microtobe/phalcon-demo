@@ -34,6 +34,13 @@ class I18n
     protected $_cached = array();
 
     /**
+     * 语言别名
+     *
+     * @var array
+     */
+    protected $_aliases = array();
+
+    /**
      * 构造方法，通过 protected 保持单例
      */
     public function __construct($lang = null)
@@ -83,7 +90,7 @@ class I18n
      */
     public function setDefault($lang)
     {
-        $this->_default = strtolower($lang);
+        $this->_default = $this->getLangByAlias($lang);
 
         return $this;
     }
@@ -99,6 +106,56 @@ class I18n
     }
 
     /**
+     * 添加语言别名
+     *
+     * @param  array       $aliases
+     * @return I18n
+     */
+    public function addAliases(array $aliases)
+    {
+        foreach ($aliases as $key => $values) {
+            $key = strtolower($key);
+
+            if (! isset($this->_aliases[$key])) {
+                $this->_aliases[$key] = array();
+            }
+
+            if (! is_array($values)) {
+                $values = array($values);
+            }
+
+            foreach ($values as $alias) {
+                if (! in_array($alias, $this->_aliases[$key])) {
+                    array_push($this->_aliases[$key], $alias);
+                }
+            }
+        }
+
+        // reset the default language
+        $this->setDefault($this->_default);
+
+        return $this;
+    }
+
+    /**
+     * 根据别名获取语言类型
+     *
+     * @return string
+     */
+    public function getLangByAlias($alias)
+    {
+        $alias = strtolower($alias);
+
+        foreach ($this->_aliases as $lang => $aliases) {
+            if (in_array($alias, $aliases)) {
+                return $lang;
+            }
+        }
+
+        return $alias;
+    }
+
+    /**
      * 判断语言是否存在
      *
      * @param  string  $lang
@@ -106,6 +163,8 @@ class I18n
      */
     public function hasLang($lang)
     {
+        $lang = $this->getLangByAlias($lang);
+
         foreach ($this->_directories as $dir) {
             if (is_dir("{$dir}/{$lang}")) {
                 return true;
@@ -155,6 +214,8 @@ class I18n
             $lang = $this->getDefault();
         }
 
+        $lang = strtolower($lang);
+
         // 初始化加载
         if (! isset($this->_cached[$lang])) {
             $this->_initialize($lang);
@@ -182,6 +243,7 @@ class I18n
      */
     protected function _initialize($lang)
     {
+        $lang     = strtolower($lang);
         $packages = $this->_packages;
 
         // 将语言默认包加入
@@ -199,6 +261,8 @@ class I18n
      */
     protected function _loadPackages(array $packages, $lang)
     {
+        $lang = strtolower($lang);
+
         // 初始化缓存
         if (! isset($this->_cached[$lang])) {
             $this->_cached[$lang] = array();

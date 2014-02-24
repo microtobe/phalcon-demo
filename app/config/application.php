@@ -106,6 +106,11 @@ return array(
         'name'      => 'lang', // $_REQUEST 键名 & Cookie 名
         'default'   => 'zh-cn', // 默认语言
         'directory' => APP_PATH . '/i18n/', // 语言包所在目录
+        'aliases'   => array( // 语言别名
+            'zh-cn' => array('zh', 'cn'),
+            'zh-tw' => array('tw', 'hk', 'zh-hk'),
+            'en-us' => array('en'),
+        ),
         'import'    => array(), // 默认加载的语言包
     ),
 );
