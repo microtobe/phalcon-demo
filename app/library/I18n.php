@@ -108,7 +108,7 @@ class I18n
     /**
      * 添加语言别名
      *
-     * @param  array       $aliases
+     * @param  array $aliases
      * @return I18n
      */
     public function addAliases(array $aliases)
