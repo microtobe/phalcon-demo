@@ -13,11 +13,13 @@ if [ ! -f $bin ]; then
 fi
 
 dir_name=`dirname $0`
-app_dir=$dir_name/..
+root_dir=$dir_name/..
 
-$bin fix $app_dir/app/functions --level=all --fixers=-psr0
-$bin fix $app_dir/app/config --level=all --fixers=-psr0
-$bin fix $app_dir/app/controllers --level=all --fixers=-psr0
-$bin fix $app_dir/app/library --level=all --fixers=-psr0
-$bin fix $app_dir/app/models --level=all --fixers=-psr0
-$bin fix $app_dir/app/plugins --level=all --fixers=-psr0
+# 需要检查的php程序目录
+php_dirs=(app/functions app/config app/controllers app/library app/models app/plugins)
+
+for dir in ${php_dirs[@]}; do
+    $bin fix $root_dir/$dir --level=all --fixers=-psr0
+done
+
+echo 'done.'

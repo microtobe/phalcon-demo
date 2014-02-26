@@ -7,30 +7,22 @@ chown -R nobody.nobody $0
 
 root_dir=$(cd "$(dirname "$0")"; cd ..; pwd)
 
-log_dir=$root_dir/logs
-cache_dir=$root_dir/app/cache
-metadata_dir=$root_dir/app/metadata
+# 需要创建的目录
+mk_dirs=($root_dir/logs $root_dir/app/cache $root_dir/app/metadata)
+
+# 创建目录并设定权限
+for dir in ${mk_dirs[@]}; do
+    if [ ! -d $dir ]; then
+        mkdir -p $dir
+        echo "Created Directory: $dir"
+    fi
+    chown -R nobody.nobody $dir
+    chmod -R 770 $dir
+done
+
 config_file=$root_dir/app/config/application.php
-
-if [ ! -d $log_dir ]; then
-    mkdir -p $log_dir
-    echo "Logs directory make sure!"
-fi
-
-if [ ! -d $cache_dir ]; then
-    mkdir -p $cache_dir
-    echo "Cache directory make sure!"
-fi
-
-if [ ! -d $metadata_dir ]; then
-    mkdir -p $metadata_dir
-    echo "MetaData directory make sure!"
-fi
-
 if [ ! -f $config_file ]; then
     echo "Missing configuration file: $config_file"
 fi
 
-chown -R nobody.nobody $log_dir
-chown -R nobody.nobody $cache_dir
-chown -R nobody.nobody $metadata_dir
+echo 'done.'
