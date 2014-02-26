@@ -1,7 +1,47 @@
 <?php
 
 /**
- * 获取配置文件内容
+ * 公共函数文件
+ */
+
+/**
+ * 加载函数库
+ *
+ *     load_functions('tag', ...)
+ *     load_functions(array('tag', ...))
+ *
+ * @param  string|array $names
+ */
+function load_functions($names)
+{
+    static $cached = array('common');
+
+    if (func_num_args() > 1) {
+        $names = func_get_args();
+    } elseif (! is_array($names)) {
+        $names = array($names);
+    }
+
+    $names = array_map('strtolower', $names);
+
+    foreach ($names as $name) {
+        if (! isset($cached[$name])) {
+            $file = APP_PATH . "/functions/{$name}.php";
+            if (is_file($file)) {
+                require_once $file;
+            }
+        }
+    }
+}
+
+/**
+ * 加载配置文件数据
+ *
+ *     config('database')
+ *     config('database.default.adapter')
+ *
+ * @param  string $name
+ * @return mixed
  */
 function config($name)
 {
@@ -56,6 +96,12 @@ function config($name)
 
 /**
  * 实例化一个 model
+ *
+ *     model('user_data')
+ *     model('UserData')
+ *
+ * @param  string $name
+ * @return object
  */
 function model($name)
 {
@@ -67,6 +113,14 @@ function model($name)
 
 /**
  * 简化 Phalcon\Di::getDefault()->getShared($service)
+ *
+ *     service('url')
+ *     service('db')
+ *     ...
+ *
+ * @see    http://docs.phalconphp.com/en/latest/api/Phalcon_DI.html
+ * @param  string $service
+ * @return object
  */
 function service($service)
 {
@@ -75,6 +129,10 @@ function service($service)
 
 /**
  * 获取完整的 url 地址
+ *
+ * @see    http://docs.phalconphp.com/en/latest/api/Phalcon_Mvc_Url.html
+ * @param  string $uri
+ * @return string
  */
 function url($uri = null)
 {
@@ -83,6 +141,10 @@ function url($uri = null)
 
 /**
  * 获取静态资源地址
+ *
+ * @see    http://docs.phalconphp.com/en/latest/api/Phalcon_Mvc_Url.html
+ * @param  string $uri
+ * @return string
  */
 function static_url($uri = null)
 {
@@ -91,6 +153,10 @@ function static_url($uri = null)
 
 /**
  * 获取包含域名在内的 url
+ *
+ * @param  string $uri
+ * @param  string $base
+ * @return string
  */
 function baseurl($uri = null, $base = HTTP_BASE)
 {
@@ -99,6 +165,13 @@ function baseurl($uri = null, $base = HTTP_BASE)
 
 /**
  * 根据 query string 参数生成 url
+ *
+ *     url_param('item/list', array('page' => 1)) // item/list?page=1
+ *     url_param('item/list?page=1', array('limit' => 10)) // item/list?page=1&limit=10
+ *
+ * @param  string $uri
+ * @param  array  $params
+ * @return string
  */
 function url_param($uri, array $params)
 {
@@ -106,7 +179,49 @@ function url_param($uri, array $params)
 }
 
 /**
+ * 获取视图内容
+ *
+ * @see    http://docs.phalconphp.com/en/latest/api/Phalcon_Mvc_View.html
+ * @return string
+ */
+function get_content()
+{
+    return service('view')->getContent();
+}
+
+/**
+ * 判断视图是否存在
+ *
+ * @param  string       $viewFile
+ * @param  string|array $suffixes
+ * @return boolean
+ */
+function has_view($viewFile, $suffixes = null)
+{
+    $file = service('view')->getViewsDir() . $viewFile;
+
+    if ($suffixes === null) {
+        $suffixes = array('phtml', 'volt');
+    } elseif (! is_array($suffixes)) {
+        $suffixes = array($suffixes);
+    }
+
+    foreach ($suffixes as $suffix) {
+        if (is_file($file . '.' . $suffix)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
  * 加载局部视图
+ *
+ * @see    http://docs.phalconphp.com/en/latest/api/Phalcon_Mvc_View.html
+ * @param  string $partialPath
+ * @param  array  $params
+ * @return string
  */
 function partial_view($partialPath, array $params = null)
 {
@@ -115,6 +230,10 @@ function partial_view($partialPath, array $params = null)
 
 /**
  * 选择不同的视图来渲染，并做为最后的 controller/action 输出
+ *
+ * @see    http://docs.phalconphp.com/en/latest/api/Phalcon_Mvc_View.html
+ * @param  string $renderView
+ * @return string
  */
 function pick_view($renderView)
 {
@@ -124,9 +243,15 @@ function pick_view($renderView)
 /**
  * 语言转换
  *
- * @param  string  $string  要转换的字符串，默认传入中文
- * @param  array   $values  需要替换的参数
- * @param  string  $lang    指定的语言类型
+ *     // file: ~/app/i18n/{$lang}/category.item.php
+ *     __('category.item.list')
+ *
+ *     // data: array('welcome' => 'Hello, :name')
+ *     __('welcome', array(':name' => 'zhouyl')) // Hello, zhouyl
+ *
+ * @param  string $string 要转换的字符串，默认传入中文
+ * @param  array  $values 需要替换的参数
+ * @param  string $lang   指定的语言类型
  * @return string
  */
 function __($string, array $values = null, $lang = null)
@@ -135,9 +260,27 @@ function __($string, array $values = null, $lang = null)
 }
 
 /**
- * 返回格式化的 json 数据
+ * 简化三元表达式
+ *
+ * @param  $boolean $boolValue
+ * @param  mixed    $trueValue
+ * @param  mixed    $falseValue
+ * @return mixed
  */
-function json_it($array, $pretty = true, $unescaped = true)
+function on($boolValue, $trueValue, $falseValue = null)
+{
+    return $boolValue ? $trueValue : $falseValue;
+}
+
+/**
+ * 返回格式化的 json 数据
+ *
+ * @param  array   $array
+ * @param  boolean $pretty    美化 json 数据
+ * @param  boolean $unescaped 关闭 Unicode 编码
+ * @return string
+ */
+function json_it(array $array, $pretty = true, $unescaped = true)
 {
     // php 5.4+
     if (defined('JSON_PRETTY_PRINT') && defined('JSON_UNESCAPED_UNICODE')) {
@@ -222,6 +365,14 @@ function json_it($array, $pretty = true, $unescaped = true)
 
 /**
  * 简化日志写入方法
+ *
+ * @see    http://docs.phalconphp.com/en/latest/api/Phalcon_Logger.html
+ * @see    http://docs.phalconphp.com/en/latest/api/Phalcon_Logger_Adapter_File.html
+ * @param  string  $name    日志名称
+ * @param  string  $message 日志内容
+ * @param  string  $type    日志类型
+ * @param  boolean $addUrl  记录当前 url
+ * @return Phalcon\Logger\Adapter\File
  */
 function write_log($name, $message, $type = null, $addUrl = false)
 {
@@ -258,7 +409,12 @@ function write_log($name, $message, $type = null, $addUrl = false)
 }
 
 /**
- * 过滤系统路径
+ * 隐藏当前系统路径
+ *
+ *     strip_path('/web/myapp/app/config/db.php') // ~/app/config/db.php
+ *
+ * @param  string $path
+ * @return string
  */
 function strip_path($path)
 {
@@ -266,12 +422,16 @@ function strip_path($path)
 }
 
 /**
- * email格式检查 (支持验证host有效性)
+ * Email格式检查 (支持验证host有效性)
+ *
+ * @param  string  $email
+ * @param  boolean $testMX
+ * @return boolean
  */
-function is_email($email, $test_mx = false)
+function is_email($email, $testMX = false)
 {
     if (preg_match('/^([_a-z0-9+-]+)(\.[_a-z0-9-]+)*@([a-z0-9-]+)(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i', $email)) {
-        if ($test_mx) {
+        if ($testMX) {
             list( , $domain) = explode("@", $email);
 
             return getmxrr($domain, $mxrecords);
@@ -285,6 +445,9 @@ function is_email($email, $test_mx = false)
 
 /**
  * 检查是否效的 url
+ *
+ * @param  string  $url
+ * @return boolean
  */
 function is_url($url)
 {
@@ -293,6 +456,11 @@ function is_url($url)
 
 /**
  * CURL POST 请求
+ *
+ * @param  string $url
+ * @param  array  $postdata
+ * @param  array  $curl_opts
+ * @return string
  */
 function curl_post($url, array $postdata = null, array $curl_opts = null)
 {
@@ -324,6 +492,10 @@ function curl_post($url, array $postdata = null, array $curl_opts = null)
 
 /**
  * CURL GET 请求
+ *
+ * @param  string $url
+ * @param  array  $curl_opts
+ * @return string
  */
 function curl_get($url, array $curl_opts = null)
 {
@@ -348,15 +520,13 @@ function curl_get($url, array $curl_opts = null)
 }
 
 /**
- * 获取缓存
- */
-function cache_get($key)
-{
-    return service('cache')->get($key . '.cache');
-}
-
-/**
  * 写入缓存
+ *
+ * @see    http://docs.phalconphp.com/en/latest/reference/cache.html
+ * @param  string  $key
+ * @param  mixed   $data
+ * @param  integer $lifetime
+ * @param  boolean $stopBuffer
  */
 function cache_save($key, $data, $lifetime = 86400, $stopBuffer = false)
 {
@@ -364,7 +534,26 @@ function cache_save($key, $data, $lifetime = 86400, $stopBuffer = false)
 }
 
 /**
+ * 获取缓存
+ *
+ * @see    http://docs.phalconphp.com/en/latest/reference/cache.html
+ * @param  string $key
+ * @param  mixed  $default
+ * @return mixed
+ */
+function cache_get($key, $default = null)
+{
+    $cache = service('cache')->get($key . '.cache');
+
+    return $cache === null ? $default : $cache;
+}
+
+/**
  * 删除缓存
+ *
+ * @see    http://docs.phalconphp.com/en/latest/reference/cache.html
+ * @param  string $key
+ * @return boolean
  */
 function cache_delete($key)
 {
@@ -372,70 +561,74 @@ function cache_delete($key)
 }
 
 /**
- * 因 number_format 默认参数带来的千分位是逗号的hack
- * 功能和 number_format一致，只是设定了固定的第3，4个参数
+ * 设置 cookie 值
+ *
+ * @param string  $name
+ * @param mixed   $value
+ * @param integer $lifetime
  */
-function num_format($number, $decimals = 0)
+function cookie_set($name, $value, $lifetime = null)
 {
-    return number_format($number , $decimals, '.', '');
-}
-/**
- * 项目更新时间
- */
-function app_update_time()
-{
-    $cache = cache_get('app_update_time');
-    if ($cache) return $cache;
-
-    $s = time();
-    cache_save('app_update_time', $s);
-
-    return $s;
+    return service('cookies')->set($name, $value, $lifetime);
 }
 
 /**
- * 加载 RequireJS
+ * 获取 cookie 值
+ *
+ * @param  string $name
+ * @param  mixed  $default
+ * @return mixed
  */
-function require_js($name)
+function cookie_get($name, $default = null)
 {
-    if (ENVIRONMENT === PRODUCTION) {
-        $baseUrl  = static_url('js');
-        $urlArgs  = app_update_time();
-    } else {
-        $baseUrl  = static_url('js_src');
-        $urlArgs  = time();
-    }
-
-    $bootup = script_bootup();
-
-    return <<<RJS
-$bootup
-<script type="text/javascript">
-new BootUp([
-    "$baseUrl/bower/require/index.js",
-    "$baseUrl/config.js",
-    "$baseUrl/$name.js"
-], {
-    version: "$urlArgs",
-    success: function () {
-        require({
-            baseUrl:"$baseUrl",
-            urlArgs:"$urlArgs",
-            config:{i18n:{locale:"zh-cn"}}
-        });
-    }
-});
-</script>
-RJS;
+    return service('cookies')->get($name, $default);
 }
 
-function script_bootup()
+/**
+ * 删除 cookie
+ *
+ * @param  string $name
+ * @return boolean
+ */
+function cookie_delete($name)
 {
-    if (ENVIRONMENT === PRODUCTION) {
-        return '<script>' . file_get_contents(DOC_PATH.'/js/bootup.js') . '</script>';
-    }
+    return service('cookies')->delete($name);
+}
 
-    return '<script src="'.static_url('js_src/bootup.js').'"></script>';
+/**
+ * 设置 session 值
+ *
+ * @see   http://docs.phalconphp.com/en/latest/reference/session.html
+ * @see   http://docs.phalconphp.com/en/latest/api/Phalcon_Session_AdapterInterface.html
+ * @param string  $name
+ * @param mixed   $value
+ */
+function session_set($name, $value)
+{
+    return service('session')->set($name, $value);
+}
+
+/**
+ * 获取 session 值
+ *
+ * @param  string $name
+ * @param  mixed  $default
+ * @return mixed
+ */
+function session_get($name, $default = null)
+{
+    return service('session')->get($name, $value);
+}
+
+/**
+ * 删除 session
+ *
+ * @param  string $name
+ * @return boolean
+ */
+function session_delete($name)
+{
+    return service('session')->remove($name);
 }
 
 /**
@@ -555,46 +748,29 @@ function html2txt($html)
  *
  * @return array
  */
-if (! function_exists('array_merge_deep')) {
-    function array_merge_deep()
-    {
-        $a = func_get_args();
-        for ($i = 1; $i < count($a); $i++) {
-            foreach ($a[$i] as $k => $v) {
-                if (isset($a[0][$k])) {
-                    if (is_array($v)) {
-                        if (is_array($a[0][$k])) {
-                            $a[0][$k] = array_merge_deep($a[0][$k], $v);
-                        } else {
-                            $v[] = $a[0][$k];
-                            $a[0][$k] = $v;
-                        }
+function array_merge_deep()
+{
+    $a = func_get_args();
+    for ($i = 1; $i < count($a); $i++) {
+        foreach ($a[$i] as $k => $v) {
+            if (isset($a[0][$k])) {
+                if (is_array($v)) {
+                    if (is_array($a[0][$k])) {
+                        $a[0][$k] = array_merge_deep($a[0][$k], $v);
                     } else {
-                        $a[0][$k] = is_array($a[0][$k]) ? array_merge($a[0][$k], array($v)) : $v;
+                        $v[] = $a[0][$k];
+                        $a[0][$k] = $v;
                     }
                 } else {
-                    $a[0][$k] = $v;
+                    $a[0][$k] = is_array($a[0][$k]) ? array_merge($a[0][$k], array($v)) : $v;
                 }
+            } else {
+                $a[0][$k] = $v;
             }
         }
-
-        return $a[0];
     }
-}
 
-/**
- * Make a string's first character lowercase
- *
- * @param  string $string
- * @return string
- */
-if (! function_exists('lcfirst')) {
-    function lcfirst($string)
-    {
-        $string = (string) $string;
-
-        return empty($string) ? '' : strtolower($string{0}) . substr($string, 1);
-    }
+    return $a[0];
 }
 
 /**
@@ -603,19 +779,17 @@ if (! function_exists('lcfirst')) {
  * @param  string $string
  * @return string
  */
-if (! function_exists('lcwords')) {
-    function lcwords($string)
-    {
-        $tokens = explode(' ', $string);
-        if (! is_array($tokens) || count($tokens) <= 1) {
-            return lcfirst($string);
-        }
-
-        $result = array();
-        foreach ($tokens as $token) {
-            $result[] = lcfirst($token);
-        }
-
-        return implode(' ', $result);
+function lcwords($string)
+{
+    $tokens = explode(' ', $string);
+    if (! is_array($tokens) || count($tokens) <= 1) {
+        return lcfirst($string);
     }
+
+    $result = array();
+    foreach ($tokens as $token) {
+        $result[] = lcfirst($token);
+    }
+
+    return implode(' ', $result);
 }

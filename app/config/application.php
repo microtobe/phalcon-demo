@@ -55,8 +55,8 @@ return array(
      * @see http://docs.phalconphp.com/en/latest/api/Phalcon_Mvc_Url.html
      */
     'url' => array(
-        'baseUri'       => '/',
-        'staticBaseUri' => '/',
+        'baseUri'       => HTTP_BASE,
+        'staticBaseUri' => HTTP_BASE,
     ),
 
     /**

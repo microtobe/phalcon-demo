@@ -44,8 +44,6 @@ task 'build-file', 'update app.build.js', ->
   # https://github.com/jrburke/r.js/blob/master/build/example.build.js
   BUILD_FILE = 'app.build.js'
   JS_DIR     = 'public/js_src'
-  EN_DIR     = 'public/js_src/nls/root'
-  CN_DIR     = 'public/js_src/nls/zh-cn'
   fs         = require 'fs'
   result     =
     appDir                 : 'public/js_src/'
@@ -57,20 +55,13 @@ task 'build-file', 'update app.build.js', ->
     normalizeDirDefines    : 'skip'
     preserveLicenseComments: no
     findNestedDependencies : yes
-    stubModules            : ['cs']
+    stubModules            : []
     modules                : [
       name   : 'config',
       include: [
         'jquery'
-        'i18n'
       ]
     ]
-
-  fs.readdirSync(EN_DIR).forEach (file) ->
-    result.modules[0].include.push('nls/root/' + file.replace('.js', ''))
-
-  fs.readdirSync(CN_DIR).forEach (file) ->
-    result.modules[0].include.push('nls/zh-cn/' + file.replace('.js', ''))
 
   fs.readdirSync(JS_DIR).forEach (file) ->
     if (file.substr(-3) is '.js') and (not (file in ['config.js', 'bootup.js']))

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+### 项目安装脚本 ###
+
 dir=$(cd "$(dirname "$0")"; cd ..; pwd)
 cd $dir
 

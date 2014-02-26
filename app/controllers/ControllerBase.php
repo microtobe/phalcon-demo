@@ -5,6 +5,11 @@ use
     Phalcon\Mvc\View;
 
 /**
+ * 加载 Phalcon\Tag 函数
+ */
+load_functions('tag');
+
+/**
  * 基础控制器类
  */
 class ControllerBase extends Controller

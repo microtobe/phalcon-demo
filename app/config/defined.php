@@ -46,7 +46,7 @@ define('DEVELOPMENT', 'development');
  * @example for nginx config
  *     location ~ \.php$ {
  *         ...
- *         fastcgi_param LITECMS_ENV 'PRODUCTION'; # PRODUCTION|TESTING|DEVELOPMENT
+ *         fastcgi_param APP_ENV 'PRODUCTION'; # PRODUCTION|TESTING|DEVELOPMENT
  *     }
  */
 if (isset($_SERVER['APP_ENV'])) {

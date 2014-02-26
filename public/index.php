@@ -49,7 +49,12 @@ require dirname(__DIR__) . '/app/config/defined.php';
 /**
  * Include the common functions
  */
-require APP_PATH . '/common/functions.php';
+require APP_PATH . '/functions/common.php';
+
+/**
+ * Include the application functions
+ */
+require APP_PATH . '/functions/application.php';
 
 /**
  * Read the configuration

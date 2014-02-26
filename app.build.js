@@ -1,5 +1,5 @@
 // 不要直接编辑此文件，请运行 `cake build-file` 自动生成
-({
+ ({
 	"appDir": "public/js_src/",
 	"baseUrl": ".",
 	"dir": "public/js/",
@@ -9,16 +9,13 @@
 	"normalizeDirDefines": "skip",
 	"preserveLicenseComments": false,
 	"findNestedDependencies": true,
-	"stubModules": [
-		"cs"
-	],
+	"stubModules": [],
 	"modules": [
 		{
 			"name": "config",
 			"include": [
-				"jquery",
-				"i18n"
+				"jquery"
 			]
 		}
 	]
-})
+} )

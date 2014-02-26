@@ -63,8 +63,7 @@ class Cookies
     /**
      * 设置 Cookie 选项
      *
-     * @param  array   $options
-     * @return Cookies
+     * @param array $options
      */
     public function setOptions(array $options)
     {
@@ -73,15 +72,14 @@ class Cookies
                 $this->{"_$key"} = $value;
             }
         }
-
-        return $this;
     }
 
     /**
      * 设置 cookie 值
      *
-     * @param  array   $options
-     * @return Cookies
+     * @param string  $name
+     * @param mixed   $value
+     * @param integer $lifetime
      */
     public function set($name, $value, $lifetime = null)
     {
@@ -96,17 +94,16 @@ class Cookies
 
         // 设置 cookie
         setcookie($name, $value, time() + $lifetime, $this->_path, $this->_domain, $this->_secure, $this->_httponly);
-
-        return $this;
     }
 
     /**
      * 获取 cookie 值
      *
-     * @param  array   $options
-     * @return Cookies
+     * @param  array $name
+     * @param  mixed $default
+     * @return mixed
      */
-    public function get($name, $default = null)
+    public function get($name)
     {
         if (! isset($_COOKIE[$name])) {
             return $default;
@@ -137,7 +134,7 @@ class Cookies
      * 删除 cookie
      *
      * @param  string  $name
-     * @return Cookies
+     * @return boolean
      */
     public function delete($name)
     {
@@ -147,19 +144,15 @@ class Cookies
         // Nullify the cookie and make it expire
         setcookie($name, null, -86400, $this->_path, $this->_domain, $this->_secure, $this->_httponly);
 
-        return $this;
+        return true;
     }
 
     /**
      * 清空所有 cookie
-     *
-     * @return Cookies
      */
     public function reset()
     {
         $_COOKIE = null;
-
-        return $this;
     }
 
     /**
