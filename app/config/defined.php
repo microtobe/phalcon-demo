@@ -57,7 +57,7 @@ if (isset($_SERVER['APP_ENV'])) {
     unset($env);
 }
 
-defined('ENVIRONMENT') or define('ENVIRONMENT', DEVELOPMENT);
+defined('ENVIRONMENT') or define('ENVIRONMENT', PRODUCTION);
 
 // -----------------------------------------------------------------------------
 // 环境常量定义
